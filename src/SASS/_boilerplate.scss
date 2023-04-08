@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+//fonts
+$Cardo: 'Cardo', serif;
+$Oswald: 'Oswald', sans-serif;
+
+
+//colors
+
+$blue: #181d38;
+$light-gray: #eaebf5;
+:root {
+ 
+  $light-purple: #bdadfc;
+    $bg: rgb(255, 201, 169);
+  $white: #ffffff;
+  $black: #000000;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+font-family: 'Cairo', sans-serif;
+  overflow-x: hidden;
+  color: #374151;
+
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+ul {
+  list-style: none;
+}
+
+.width {
+  width: min(90%, 1300px);
+  margin-inline: auto;
+}
