@@ -1,54 +1,58 @@
 .current-question {
   font-weight: bold;
-  margin-top: 30px;
   margin-bottom: 20px;
   font-size: 1.5rem;
 }
 
-.current-question-answers{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 1rem;
-    div {
-        cursor: pointer;
-  width: 100%;
-  border-radius: 1rem;
-  padding: 0.6rem;
+.current-question-answers {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: flex-start;
   gap: 1rem;
-  align-items: center;
-  border: 2px solid #374151;
-  transition-duration: 0.3s;
-
-  span {
-      border: 3px solid #374151;
-    width: 30px;
-    border-radius: 50%;
-    height: 30px;
-    border-radius: 50%;
-    font-weight: bold;
+  div {
+    cursor: pointer;
+    width: 100%;
+    border-radius: 1rem;
+    padding: 0.6rem;
     display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
     align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
+    border: 2px solid #374151;
+    transition-duration: 0.3s;
+
+    span {
+      pointer-events: none;
+      border: 3px solid #374151;
+      width: 30px;
+      border-radius: 50%;
+      height: 30px;
+      border-radius: 50%;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    p {
+      pointer-events: none;
+      font-weight: bold;
+      font-size: 1.2;
+    }
   }
-  p{
-    font-weight: bold;
-    font-size: 1.2;
-  }
-}
-div:hover {
+
+  .selected,
+  div:hover {
     background-color: #374151;
-      border: 2px solid #374151;
+    border: 2px solid #374151;
 
     color: white;
 
     span {
-      border: 3px solid #ffffff;}
-}
+      border: 3px solid #ffffff;
+    }
+  }
 }
 .hover-text {
   display: none;
@@ -63,4 +67,104 @@ div:hover {
 
 .hide-dot-menu {
   transform: scaleY(1);
+}
+
+/* fixed */
+
+.myfixed {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.myquestions-container-relative {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.myabsolute-hide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #374151d9;
+}
+
+.myquestions-wrapper {
+  width: 600px;
+  height: 400px;
+  background-color: white;
+  border-radius: 3rem;
+  box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.062);
+  z-index: 150;
+  padding: 2rem;
+  transition: all 0.5s ease-in-out;
+  transform: scale(0);
+}
+
+.mytoggle-fixed {
+  pointer-events: all;
+  opacity: 1;
+}
+
+.mytoggle-QuestionsWrapper {
+  transform: scale(1);
+}
+.myquestions-wrapper h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-block: 2rem;
+  border-bottom: 2px solid #374151;
+  padding-bottom: 2rem;
+}
+
+.myactual-questions-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  //background-color: green;
+  gap: 2rem;
+  place-content: center;
+  place-items: center;
+  width: 100%;
+  height: 60%;
+  overflow-y: auto;
+}
+
+.myquestion {
+  border: 2px dashed #374151;
+  color: #374151;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button[disabled] {
+  cursor: no-drop;
+}
+button[disabled]:hover {
+  transform: scale(1);
+}
+.selected-popup-question {
+  background-color: #374151;
+  border: 2px solid #374151;
+  color: white;
 }
