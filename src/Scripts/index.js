@@ -1,7 +1,7 @@
 //Exam Details
 const exam = {
   title: "Section 2, Module 1: Math",
-  time: "1888",
+  time: "100",
   questions: [
     {
       question: "What is Laravel?",
@@ -301,55 +301,70 @@ const exam = {
 };
 
 //timer
+let timeInterval = setInterval("timer()", 1000);
+
+let time =
+  parseInt(
+    JSON.parse(localStorage.getItem(JSON.stringify(exam.title + " " + "Time")))
+  ) || parseInt(exam.time);
 
 function timer() {
-  let time = parseInt(localStorage.getItem("time")) || parseInt(exam.time);
-
   let minutes = parseInt(time / 60);
   let seconds = parseInt(time % 60);
   minutes = minutes < 10 ? "0" + minutes : minutes;
   seconds = seconds < 10 ? "0" + seconds : seconds;
   document.querySelector(".timer").innerHTML = +minutes + ":" + seconds;
   if (time <= 0) {
-    localStorage.clear("time");
+    handleSubmit();
   } else {
     time--;
-    localStorage.setItem("time", time);
+    localStorage.setItem(JSON.stringify(exam.title + " " + "Time"), time);
   }
-  //console.log(minutes, seconds);
+  console.log("seconds");
 }
-
-let timeInterval =setInterval("timer()", 1000);
 
 const hideTimerBtn = document.querySelector(".hide-timer");
 const showTimerBtn = document.querySelector(".show-timer");
 
 //hide timer logic
-function hideTimer () {
-clearInterval(timeInterval);
-document.querySelector(".timer").innerHTML = "";
-console.log("clicked");
-hideTimerBtn.classList.toggle("disable-timer");
-showTimerBtn.classList.toggle("disable-timer");
+function hideTimer() {
+  clearInterval(timeInterval);
+  document.querySelector(".timer").innerHTML = "";
+  console.log("clicked");
+  hideTimerBtn.classList.toggle("disable-timer");
+  showTimerBtn.classList.toggle("disable-timer");
 }
 
 hideTimerBtn.addEventListener("click", hideTimer);
 
 //show timer logic
-function showTimer () {
-timeInterval = setInterval("timer()", 1000);
-hideTimerBtn.classList.toggle("disable-timer");
-showTimerBtn.classList.toggle("disable-timer");
+function showTimer() {
+  timeInterval = setInterval("timer()", 1000);
+  hideTimerBtn.classList.toggle("disable-timer");
+  showTimerBtn.classList.toggle("disable-timer");
 }
 
 showTimerBtn.addEventListener("click", showTimer);
 
+//submit button logic
+const submitBtn = document.querySelector(".submit-btn");
+submitBtn.addEventListener("click", handleSubmit);
+function handleSubmit() {
+  //perform an automatic submission then clear the local storage and the interval as a result of successful submission (.then())
+  localStorage.clear(JSON.stringify(exam.title + " " + "Questions"));
+  localStorage.clear(JSON.stringify(exam.title + " " + "Time"));
+  clearInterval(timeInterval);
+}
+
 //Questions
 //const examTitle=exam.title
-const questions = JSON.parse(localStorage.getItem("examQuestions")) || exam.questions;
+const questions =
+  JSON.parse(
+    localStorage.getItem(JSON.stringify(exam.title + " " + "Questions"))
+  ) || exam.questions;
 
 //Variables ---------------------------------------
-let currentQuestionIndex = 5;
+let currentQuestionIndex = 0;
 
 //selectors ---------------------------------------
 
@@ -441,7 +456,12 @@ const InitQuiz = () => {
     questions[currentQuestionIndex].answers[
       selectedAnswerIndex
     ].selected = true;
-    localStorage.setItem("examQuestions", JSON.stringify(questions));
+    //localStorage.setItem("examQuestions", JSON.stringify(questions));
+    localStorage.setItem(
+      JSON.stringify(exam.title + " " + "Questions"),
+      JSON.stringify(questions)
+    );
+
     InitQuiz();
   }
   //add the order and text of each answer
