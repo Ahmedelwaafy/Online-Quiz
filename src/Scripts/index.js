@@ -1,7 +1,7 @@
 //Exam Details
 const exam = {
   title: "Section 2, Module 1: Math",
-  time: "10",
+  time: "120",
   questions: [
     {
       question: "What is Laravel?",
@@ -463,7 +463,7 @@ const InitQuiz = () => {
     );
 
     InitQuiz();
-    showPopupQuestions(); 
+    showPopupQuestions();
   }
   //add the order and text of each answer
   questions[currentQuestionIndex].answers.forEach((answer, index) => {
