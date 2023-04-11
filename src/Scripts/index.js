@@ -1,7 +1,7 @@
 //Exam Details
 const exam = {
   title: "Section 2, Module 1: Math",
-  time: "100",
+  time: "10",
   questions: [
     {
       question: "What is Laravel?",
@@ -529,6 +529,9 @@ function showPopupQuestions() {
     popupquestion.addEventListener("click", goToQuestion);
     if (currentQuestionIndex === index) {
       popupquestion.classList.add("selected-popup-question");
+      const locationIcon = document.createElement("icon");
+      locationIcon.classList.add("fa", "fa-location-dot", "location-icon");
+      popupquestion.appendChild(locationIcon);
     }
     popupquestions.appendChild(popupquestion);
   });

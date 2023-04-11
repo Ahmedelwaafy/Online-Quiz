@@ -163,8 +163,9 @@
 }
 
 .myquestion {
-  border: 2px dashed #374151;
+  border: 2px dashed #f345a4;
   color: #374151;
+  background-color: #f345a4;
   width: 3rem;
   height: 3rem;
   display: flex;
@@ -182,10 +183,20 @@ button[disabled]:hover {
   transform: scale(1);
 }
 .selected-popup-question {
-  background-color: #374151;
-  border: 2px solid #374151;
+  background-color: #47f177;
+  border: 2px solid #47f177;
   color: white;
+  position: relative;
 }
+ .location-icon{
+position: absolute;
+top: -28px;
+left: 50%;
+transform: translateX(-50%);
+cursor: pointer;
+font-size: 24px;
+color: #47f177;
+ }
 
 .disable-timer{
   display: none;
