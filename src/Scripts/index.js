@@ -463,6 +463,7 @@ const InitQuiz = () => {
     );
 
     InitQuiz();
+    showPopupQuestions(); 
   }
   //add the order and text of each answer
   questions[currentQuestionIndex].answers.forEach((answer, index) => {
@@ -524,11 +525,21 @@ function showPopupQuestions() {
 
   questions.forEach((ques, index) => {
     let popupquestion = document.createElement("span");
-    popupquestion.classList.add("myquestion");
     popupquestion.innerHTML = index + 1;
     popupquestion.addEventListener("click", goToQuestion);
-    if (currentQuestionIndex === index) {
+    let selected = false;
+    questions[index].answers.forEach((answer) => {
+      if (answer.selected) {
+        selected = true;
+      }
+    });
+
+    if (selected) {
       popupquestion.classList.add("selected-popup-question");
+    } else {
+      popupquestion.classList.add("myquestion");
+    }
+    if (currentQuestionIndex === index) {
       const locationIcon = document.createElement("icon");
       locationIcon.classList.add("fa", "fa-location-dot", "location-icon");
       popupquestion.appendChild(locationIcon);
