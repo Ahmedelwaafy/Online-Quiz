@@ -211,3 +211,16 @@ color: #374151;
 .disable-timer{
   display: none;
 }
+
+input{
+  border: 2px solid #374151;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+  color: #374151;
+  padding: 0.3rem;
+  width: 190px;
+}
+input::placeholder{
+  color: #374151;
+  font-size: 0.9rem;
+}

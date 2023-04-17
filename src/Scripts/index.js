@@ -1,37 +1,86 @@
+const inputContainer = document.querySelector(".input-container");
+
+let exam;
+//Questions
+let ChooseQuestions;
+
+let timeInterval;
+
+let time;
+
+async function fetchData() {
+  try {
+    const response = await fetch("https://bayoumymath.com/api/quiz2/22");
+
+    if (!response.ok) {
+      throw new Error("Network response was not OK");
+    }
+
+    exam = await response.json();
+
+    ChooseQuestions =
+      JSON.parse(
+        localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
+      ) || exam.choosequestions;
+
+    time =
+      parseInt(
+        JSON.parse(
+          localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Time"))
+        )
+      ) || parseInt(exam.quiz.duration * 60);
+
+    const imgPreview = document.createElement("div");
+    imgPreview.innerHTML = `${exam.choosequestions[5].question}`;
+
+    //inputContainer.appendChild(imgPreview);
+
+    console.log(exam);
+    InitQuiz();
+    timeInterval = setInterval("timer()", 1000);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+document.addEventListener("DOMContentLoaded", fetchData());
 //Exam Details
-const exam = {
+
+const exa = {
   title: "Section 2, Module 1: Math",
   time: "120",
   questions: [
     {
+      question: "What is Your Name?",
+      answers: [],
+    },
+
+    {
+      id: 10,
       question: "What is Laravel?",
       answers: [
+
         {
-          text: "Laravel is an open-source widely used Ruby framework.",
-          correct: false,
-          selected: false,
+          answer: "Laravel is an open-source widely used Ruby framework.",
           order: "A",
         },
+
         {
-          text: "Laravel is an open-source widely used PHP framework.",
-          correct: true,
-          selected: false,
+          answer: "Laravel is an open-source widely used Ruby framework.",
           order: "B",
         },
+
         {
-          text: "Laravel is an open-source widely used JavaScript framework.",
-          correct: false,
-          selected: false,
+          answer: "Laravel is an open-source widely used Ruby framework.",
           order: "C",
         },
+
         {
-          text: "Laravel is an open-source widely used Python framework.",
-          correct: false,
-          selected: false,
+          answer: "Laravel is an open-source widely used Ruby framework.",
           order: "D",
         },
       ],
     },
+    
     {
       question: "What is HTTP middleware in Laravel?",
       answers: [
@@ -301,12 +350,6 @@ const exam = {
 };
 
 //timer
-let timeInterval = setInterval("timer()", 1000);
-
-let time =
-  parseInt(
-    JSON.parse(localStorage.getItem(JSON.stringify(exam.title + " " + "Time")))
-  ) || parseInt(exam.time);
 
 function timer() {
   let minutes = parseInt(time / 60);
@@ -318,7 +361,7 @@ function timer() {
     handleSubmit();
   } else {
     time--;
-    localStorage.setItem(JSON.stringify(exam.title + " " + "Time"), time);
+    localStorage.setItem(JSON.stringify(exam.quiz.name + " " + "Time"), time);
   }
   console.log("seconds");
 }
@@ -351,17 +394,10 @@ const submitBtn = document.querySelector(".submit-btn");
 submitBtn.addEventListener("click", handleSubmit);
 function handleSubmit() {
   //perform an automatic submission then clear the local storage and the interval as a result of successful submission (.then())
-  localStorage.clear(JSON.stringify(exam.title + " " + "Questions"));
-  localStorage.clear(JSON.stringify(exam.title + " " + "Time"));
+  localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Questions"));
+  localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Time"));
   clearInterval(timeInterval);
 }
-
-//Questions
-//const examTitle=exam.title
-const questions =
-  JSON.parse(
-    localStorage.getItem(JSON.stringify(exam.title + " " + "Questions"))
-  ) || exam.questions;
 
 //Variables ---------------------------------------
 let currentQuestionIndex = 0;
@@ -438,8 +474,23 @@ const InitQuiz = () => {
   //add current Question's text and number
   let currentQuestion = document.querySelector(".current-question");
   let currentQuestionNumber = currentQuestionIndex + 1;
-  currentQuestion.innerHTML =
-    currentQuestionNumber + ". " + questions[currentQuestionIndex].question;
+  /**currentQuestion.innerHTML =
+    currentQuestionNumber + ". " + questions[currentQuestionIndex].question;*/
+
+  currentQuestion.innerHTML = `${ChooseQuestions[currentQuestionIndex].question}`;
+
+  //handle if the question is not multiple choose and no answers show input
+  let myInput = document.createElement("input");
+  myInput.setAttribute("type", "text");
+  myInput.setAttribute("placeholder", "Add your Answer Here");
+
+  /** 
+  if (questions[currentQuestionIndex].answers.length === 0) {
+    inputContainer.appendChild(myInput);
+  } else if (document.querySelector("input")) {
+    inputContainer.removeChild(document.querySelector("input"));
+  }
+  */
 
   //add current Question's Answers
   let currentQuestionAnswers = document.querySelector(
@@ -450,37 +501,40 @@ const InitQuiz = () => {
 
   function selectAnswer(e) {
     let selectedAnswerIndex = e.target.dataset.index;
-    questions[currentQuestionIndex].answers.forEach((answer, index) => {
+    ChooseQuestions[currentQuestionIndex].answers.forEach((answer, index) => {
       answer.selected = false;
     });
-    questions[currentQuestionIndex].answers[
+    ChooseQuestions[currentQuestionIndex].answers[
       selectedAnswerIndex
     ].selected = true;
     //localStorage.setItem("examQuestions", JSON.stringify(questions));
     localStorage.setItem(
-      JSON.stringify(exam.title + " " + "Questions"),
-      JSON.stringify(questions)
+      JSON.stringify(exam.quiz.name + " " + "Questions"),
+      JSON.stringify(ChooseQuestions)
     );
 
     InitQuiz();
     showPopupQuestions();
   }
   //add the order and text of each answer
-  questions[currentQuestionIndex].answers.forEach((answer, index) => {
+
+  ChooseQuestions[currentQuestionIndex].answers.forEach((answer, index) => {
     let singleAnswerDiv = document.createElement("div");
     let singleAnswerOrder = document.createElement("span");
-    let singleAnswerText = document.createElement("p");
-
     singleAnswerOrder.innerHTML = answer.order;
-    singleAnswerText.innerHTML = answer.text;
+    let singleAnswerText = document.createElement("p");
+    singleAnswerText.innerHTML = answer.answer;
 
     //add a different style for the selected answer
-    if (answer.selected) {
+    /**if (answer.selected) {
       singleAnswerDiv.classList.add("selected");
     }
-
+*/
     singleAnswerDiv.appendChild(singleAnswerOrder);
     singleAnswerDiv.appendChild(singleAnswerText);
+  
+       
+
     currentQuestionAnswers.appendChild(singleAnswerDiv);
 
     //add index attribute to be fetched from selectAnswer function
@@ -494,7 +548,7 @@ const InitQuiz = () => {
   } else {
     previousBtn.removeAttribute("disabled");
   }
-  if (currentQuestionIndex == questions.length - 1) {
+  if (currentQuestionIndex == ChooseQuestions.length - 1) {
     nextBtn.setAttribute("disabled", "disabled");
   } else {
     nextBtn.removeAttribute("disabled");
@@ -504,7 +558,7 @@ const InitQuiz = () => {
   footerQuestionsCount.innerHTML = questions.length;
 };
 
-document.addEventListener("DOMContentLoaded", InitQuiz);
+//document.addEventListener("DOMContentLoaded", InitQuiz);
 
 //goToQuestion function logic
 function goToQuestion(e) {
