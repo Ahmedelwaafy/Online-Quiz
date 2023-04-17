@@ -10,6 +10,7 @@ let time;
 
 async function fetchData() {
   try {
+
     const response = await fetch("https://bayoumymath.com/api/quiz2/22");
 
     if (!response.ok) {
@@ -39,6 +40,7 @@ async function fetchData() {
     InitQuiz();
     showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
+    
   } catch (error) {
     console.error("Error:", error);
   }
