@@ -479,7 +479,7 @@ const InitQuiz = () => {
     inputContainer.removeChild(document.querySelector("input"));
   }
  let myInput = document.createElement("input");
- myInput.setAttribute("type", "text");
+ myInput.setAttribute("type", "number");
  myInput.setAttribute("placeholder", "Add your Answer Here");
  myInput.style.display="none"
 
