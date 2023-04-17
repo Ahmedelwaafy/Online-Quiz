@@ -37,6 +37,7 @@ async function fetchData() {
 
     console.log(exam);
     InitQuiz();
+    showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
   } catch (error) {
     console.error("Error:", error);
@@ -474,10 +475,9 @@ const InitQuiz = () => {
   //add current Question's text and number
   let currentQuestion = document.querySelector(".current-question");
   let currentQuestionNumber = currentQuestionIndex + 1;
-  /**currentQuestion.innerHTML =
-    currentQuestionNumber + ". " + questions[currentQuestionIndex].question;*/
+ 
 
-  currentQuestion.innerHTML = `${ChooseQuestions[currentQuestionIndex].question}`;
+  currentQuestion.innerHTML = ` ${currentQuestionNumber}. ${ChooseQuestions[currentQuestionIndex].question}`;
 
   //handle if the question is not multiple choose and no answers show input
   let myInput = document.createElement("input");
@@ -526,15 +526,12 @@ const InitQuiz = () => {
     singleAnswerText.innerHTML = answer.answer;
 
     //add a different style for the selected answer
-    /**if (answer.selected) {
+   if (answer.selected) {
       singleAnswerDiv.classList.add("selected");
     }
-*/
+
     singleAnswerDiv.appendChild(singleAnswerOrder);
     singleAnswerDiv.appendChild(singleAnswerText);
-  
-       
-
     currentQuestionAnswers.appendChild(singleAnswerDiv);
 
     //add index attribute to be fetched from selectAnswer function
@@ -555,7 +552,7 @@ const InitQuiz = () => {
   }
 
   footerCurrentQuestionNumber.innerHTML = currentQuestionIndex + 1;
-  footerQuestionsCount.innerHTML = questions.length;
+  footerQuestionsCount.innerHTML = ChooseQuestions.length;
 };
 
 //document.addEventListener("DOMContentLoaded", InitQuiz);
@@ -577,12 +574,12 @@ const popupquestions = document.querySelector(".myactual-questions-container");
 function showPopupQuestions() {
   popupquestions.innerHTML = "";
 
-  questions.forEach((ques, index) => {
+  ChooseQuestions.forEach((ques, index) => {
     let popupquestion = document.createElement("span");
     popupquestion.innerHTML = index + 1;
     popupquestion.addEventListener("click", goToQuestion);
     let selected = false;
-    questions[index].answers.forEach((answer) => {
+    ChooseQuestions[index].answers.forEach((answer) => {
       if (answer.selected) {
         selected = true;
       }
@@ -602,4 +599,4 @@ function showPopupQuestions() {
   });
 }
 
-showPopupQuestions();
+
