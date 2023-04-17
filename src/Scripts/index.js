@@ -1,14 +1,14 @@
-const inputContainer = document.querySelector(".input-container");
 
 let exam;
 //Questions
-let ChooseQuestions;
+let Questions;
 
 let timeInterval;
 
 let time;
 
 async function fetchData() {
+
   try {
 
     const response = await fetch("https://bayoumymath.com/api/quiz2/22");
@@ -19,10 +19,9 @@ async function fetchData() {
 
     exam = await response.json();
 
-    ChooseQuestions =
-      JSON.parse(
-        localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
-      ) || exam.choosequestions;
+    Questions = JSON.parse(
+      localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
+    ) || [...exam.choosequestions, ...exam.essayquestions];
 
     time =
       parseInt(
@@ -31,16 +30,13 @@ async function fetchData() {
         )
       ) || parseInt(exam.quiz.duration * 60);
 
-    const imgPreview = document.createElement("div");
-    imgPreview.innerHTML = `${exam.choosequestions[5].question}`;
-
-    //inputContainer.appendChild(imgPreview);
+    
 
     console.log(exam);
     InitQuiz();
     showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
-    
+
   } catch (error) {
     console.error("Error:", error);
   }
@@ -477,14 +473,19 @@ const InitQuiz = () => {
   //add current Question's text and number
   let currentQuestion = document.querySelector(".current-question");
   let currentQuestionNumber = currentQuestionIndex + 1;
- 
-
-  currentQuestion.innerHTML = ` ${currentQuestionNumber}. ${ChooseQuestions[currentQuestionIndex].question}`;
-
   //handle if the question is not multiple choose and no answers show input
-  let myInput = document.createElement("input");
-  myInput.setAttribute("type", "text");
-  myInput.setAttribute("placeholder", "Add your Answer Here");
+  const inputContainer = document.querySelector(".input-container");
+  if(document.querySelector("input")){
+    inputContainer.removeChild(document.querySelector("input"));
+  }
+ let myInput = document.createElement("input");
+ myInput.setAttribute("type", "text");
+ myInput.setAttribute("placeholder", "Add your Answer Here");
+ myInput.style.display="none"
+
+
+  currentQuestion.innerHTML = ` ${currentQuestionNumber}. ${Questions[currentQuestionIndex].question}`;
+
 
   /** 
   if (questions[currentQuestionIndex].answers.length === 0) {
@@ -503,24 +504,26 @@ const InitQuiz = () => {
 
   function selectAnswer(e) {
     let selectedAnswerIndex = e.target.dataset.index;
-    ChooseQuestions[currentQuestionIndex].answers.forEach((answer, index) => {
+    Questions[currentQuestionIndex].answers.forEach((answer, index) => {
       answer.selected = false;
     });
-    ChooseQuestions[currentQuestionIndex].answers[
+    Questions[currentQuestionIndex].answers[
       selectedAnswerIndex
     ].selected = true;
     //localStorage.setItem("examQuestions", JSON.stringify(questions));
     localStorage.setItem(
       JSON.stringify(exam.quiz.name + " " + "Questions"),
-      JSON.stringify(ChooseQuestions)
+      JSON.stringify(Questions)
     );
 
     InitQuiz();
     showPopupQuestions();
   }
   //add the order and text of each answer
+if (Questions[currentQuestionIndex].answers){
+    myInput.style.display = "none";
 
-  ChooseQuestions[currentQuestionIndex].answers.forEach((answer, index) => {
+  Questions[currentQuestionIndex].answers.forEach((answer, index) => {
     let singleAnswerDiv = document.createElement("div");
     let singleAnswerOrder = document.createElement("span");
     singleAnswerOrder.innerHTML = answer.order;
@@ -528,7 +531,7 @@ const InitQuiz = () => {
     singleAnswerText.innerHTML = answer.answer;
 
     //add a different style for the selected answer
-   if (answer.selected) {
+    if (answer.selected) {
       singleAnswerDiv.classList.add("selected");
     }
 
@@ -540,21 +543,24 @@ const InitQuiz = () => {
     singleAnswerDiv.dataset.index = index;
     singleAnswerDiv.addEventListener("click", selectAnswer);
   });
-
+}else{
+  myInput.style.display = "block";
+inputContainer.appendChild(myInput);
+}
   //disable previous button if index=0 & disable next button if index = question.length
   if (currentQuestionIndex == 0) {
     previousBtn.setAttribute("disabled", "disabled");
   } else {
     previousBtn.removeAttribute("disabled");
   }
-  if (currentQuestionIndex == ChooseQuestions.length - 1) {
+  if (currentQuestionIndex == Questions.length - 1) {
     nextBtn.setAttribute("disabled", "disabled");
   } else {
     nextBtn.removeAttribute("disabled");
   }
 
   footerCurrentQuestionNumber.innerHTML = currentQuestionIndex + 1;
-  footerQuestionsCount.innerHTML = ChooseQuestions.length;
+  footerQuestionsCount.innerHTML = Questions.length;
 };
 
 //document.addEventListener("DOMContentLoaded", InitQuiz);
@@ -576,17 +582,19 @@ const popupquestions = document.querySelector(".myactual-questions-container");
 function showPopupQuestions() {
   popupquestions.innerHTML = "";
 
-  ChooseQuestions.forEach((ques, index) => {
+  Questions.forEach((ques, index) => {
     let popupquestion = document.createElement("span");
     popupquestion.innerHTML = index + 1;
     popupquestion.addEventListener("click", goToQuestion);
     let selected = false;
-    ChooseQuestions[index].answers.forEach((answer) => {
-      if (answer.selected) {
-        selected = true;
-      }
-    });
 
+    if (Questions[index].answers){
+      Questions[index].answers.forEach((answer) => {
+        if (answer.selected) {
+          selected = true;
+        }
+      });
+    }
     if (selected) {
       popupquestion.classList.add("selected-popup-question");
     } else {
