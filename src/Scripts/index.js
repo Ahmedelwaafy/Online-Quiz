@@ -597,6 +597,8 @@ function showPopupQuestions() {
           selected = true;
         }
       });
+    }else if (Questions[index].answer && Questions[index].answer !== "") {
+      selected = true;
     }
     if (selected) {
       popupquestion.classList.add("selected-popup-question");
