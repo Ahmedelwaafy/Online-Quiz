@@ -1,4 +1,3 @@
-
 let exam;
 //Questions
 let Questions;
@@ -8,9 +7,7 @@ let timeInterval;
 let time;
 
 async function fetchData() {
-
   try {
-
     const response = await fetch("https://bayoumymath.com/api/quiz2/22");
 
     if (!response.ok) {
@@ -30,13 +27,10 @@ async function fetchData() {
         )
       ) || parseInt(exam.quiz.duration * 60);
 
-    
-
     console.log(exam);
     InitQuiz();
     showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
-
   } catch (error) {
     console.error("Error:", error);
   }
@@ -57,7 +51,6 @@ const exa = {
       id: 10,
       question: "What is Laravel?",
       answers: [
-
         {
           answer: "Laravel is an open-source widely used Ruby framework.",
           order: "A",
@@ -79,7 +72,7 @@ const exa = {
         },
       ],
     },
-    
+
     {
       question: "What is HTTP middleware in Laravel?",
       answers: [
@@ -362,7 +355,7 @@ function timer() {
     time--;
     localStorage.setItem(JSON.stringify(exam.quiz.name + " " + "Time"), time);
   }
-  console.log("seconds");
+  //console.log("seconds");
 }
 
 const hideTimerBtn = document.querySelector(".hide-timer");
@@ -475,25 +468,15 @@ const InitQuiz = () => {
   let currentQuestionNumber = currentQuestionIndex + 1;
   //handle if the question is not multiple choose and no answers show input
   const inputContainer = document.querySelector(".input-container");
-  if(document.querySelector("input")){
+  if (document.querySelector("input")) {
     inputContainer.removeChild(document.querySelector("input"));
   }
- let myInput = document.createElement("input");
- myInput.setAttribute("type", "number");
- myInput.setAttribute("placeholder", "Add your Answer Here");
- myInput.style.display="none"
-
+  let myInput = document.createElement("input");
+  myInput.setAttribute("type", "number");
+  myInput.setAttribute("placeholder", "Add your Answer Here");
+  myInput.style.display = "none";
 
   currentQuestion.innerHTML = ` ${currentQuestionNumber}. ${Questions[currentQuestionIndex].question}`;
-
-
-  /** 
-  if (questions[currentQuestionIndex].answers.length === 0) {
-    inputContainer.appendChild(myInput);
-  } else if (document.querySelector("input")) {
-    inputContainer.removeChild(document.querySelector("input"));
-  }
-  */
 
   //add current Question's Answers
   let currentQuestionAnswers = document.querySelector(
@@ -519,34 +502,54 @@ const InitQuiz = () => {
     InitQuiz();
     showPopupQuestions();
   }
+
+  function handleInputChange(e) {
+    console.log(e.target.value);
+    Questions[currentQuestionIndex].answer = e.target.value;
+    localStorage.setItem(
+      JSON.stringify(exam.quiz.name + " " + "Questions"),
+      JSON.stringify(Questions)
+    );
+
+    InitQuiz();
+    showPopupQuestions();
+  }
   //add the order and text of each answer
-if (Questions[currentQuestionIndex].answers){
-    myInput.style.display = "none";
+  if (Questions[currentQuestionIndex].answers) {
+    Questions[currentQuestionIndex].answers.forEach((answer, index) => {
+      let singleAnswerDiv = document.createElement("div");
+      let singleAnswerOrder = document.createElement("span");
+      singleAnswerOrder.innerHTML = answer.order;
+      let singleAnswerText = document.createElement("p");
+      singleAnswerText.innerHTML = answer.answer;
 
-  Questions[currentQuestionIndex].answers.forEach((answer, index) => {
-    let singleAnswerDiv = document.createElement("div");
-    let singleAnswerOrder = document.createElement("span");
-    singleAnswerOrder.innerHTML = answer.order;
-    let singleAnswerText = document.createElement("p");
-    singleAnswerText.innerHTML = answer.answer;
+      //add a different style for the selected answer
+      if (answer.selected) {
+        singleAnswerDiv.classList.add("selected");
+      }
 
-    //add a different style for the selected answer
-    if (answer.selected) {
-      singleAnswerDiv.classList.add("selected");
+      singleAnswerDiv.appendChild(singleAnswerOrder);
+      singleAnswerDiv.appendChild(singleAnswerText);
+      currentQuestionAnswers.appendChild(singleAnswerDiv);
+
+      //add index attribute to be fetched from selectAnswer function
+      singleAnswerDiv.dataset.index = index;
+      singleAnswerDiv.addEventListener("click", selectAnswer);
+    });
+  } else {
+    myInput.style.display = "block";
+    inputContainer.appendChild(myInput);
+    document
+    .querySelector("input")
+    .addEventListener("change", handleInputChange);
+    console.log(document.querySelector("input"));
+    if(Questions[currentQuestionIndex].answer){
+      document.querySelector("input").value = parseInt(
+        Questions[currentQuestionIndex].answer
+      );
     }
+  }
 
-    singleAnswerDiv.appendChild(singleAnswerOrder);
-    singleAnswerDiv.appendChild(singleAnswerText);
-    currentQuestionAnswers.appendChild(singleAnswerDiv);
-
-    //add index attribute to be fetched from selectAnswer function
-    singleAnswerDiv.dataset.index = index;
-    singleAnswerDiv.addEventListener("click", selectAnswer);
-  });
-}else{
-  myInput.style.display = "block";
-inputContainer.appendChild(myInput);
-}
   //disable previous button if index=0 & disable next button if index = question.length
   if (currentQuestionIndex == 0) {
     previousBtn.setAttribute("disabled", "disabled");
@@ -588,7 +591,7 @@ function showPopupQuestions() {
     popupquestion.addEventListener("click", goToQuestion);
     let selected = false;
 
-    if (Questions[index].answers){
+    if (Questions[index].answers) {
       Questions[index].answers.forEach((answer) => {
         if (answer.selected) {
           selected = true;
@@ -608,5 +611,3 @@ function showPopupQuestions() {
     popupquestions.appendChild(popupquestion);
   });
 }
-
-
