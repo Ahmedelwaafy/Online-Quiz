@@ -136,14 +136,20 @@ function handleSubmit() {
   }
   if (finalAnswers.answers.length > 0 || confirm) {
     try {
-      let response = fetch("https://example.com/profile", {
+      let response = fetch("https://bayoumymath.com/api/quiz2/submit/22", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(finalAnswers),
       })
-        .then((res) => res.json())
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
         .then((data) => {
-          // Do some stuff ...
+          console.log(data);
         });
       if (!response.ok) {
         throw new Error("Submit process failed, please try again!");
