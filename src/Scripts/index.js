@@ -10,7 +10,7 @@ let finalAnswers = {
   examID: "",
   answers: [],
 };
-
+const examName = document.querySelector(".exam-title");
 async function fetchData() {
   try {
     const response = await fetch("https://bayoumymath.com/api/quiz2/22");
@@ -40,11 +40,13 @@ async function fetchData() {
     timeInterval = setInterval("timer()", 1000);
     finalAnswers.examName = exam.quiz.name;
     finalAnswers.examID = exam.quiz.id;
+    examName.innerHTML = exam.quiz.name;
   } catch (error) {
     console.error("Error:", error);
+    /*
     alert(
       "Some thing wrong happened while retrieving the exam details, please refresh the page and try again!"
-    );
+    );*/
   }
 }
 document.addEventListener("DOMContentLoaded", fetchData());
@@ -183,6 +185,10 @@ let footerQuestionsCount = document.querySelector(".questions-count");
 dotBtn.addEventListener("click", () =>
   dotMenu.classList.toggle("hide-dot-menu")
 );
+document.querySelectorAll(".hide-drop-down").forEach((btn)=>{
+  btn.addEventListener("click", () =>
+  dotMenu.classList.toggle("hide-dot-menu"))
+});
 
 //hover-text
 crossBtn.addEventListener("mouseover", () =>
@@ -341,6 +347,8 @@ const popupquestions = document.querySelector(".myactual-questions-container");
 
 function showPopupQuestions() {
   popupquestions.innerHTML = "";
+const windowExamTitle = document.querySelector(".window-exam-title");
+    windowExamTitle.innerHTML = exam.quiz.name;
 
   Questions.forEach((ques, index) => {
     let popupquestion = document.createElement("span");

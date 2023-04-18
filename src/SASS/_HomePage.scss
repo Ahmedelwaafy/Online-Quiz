@@ -1,9 +1,27 @@
+p {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+  }
+  .exam-title{
+    font-weight: bold;
+  }
 .current-question {
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   font-size: 1.5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  p {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+  }
 }
-
 .current-question-answers {
   display: flex;
   flex-direction: column;
@@ -112,7 +130,7 @@
   align-items: center;
   max-width: 600px;
   max-height: 400px;
-    overflow-y: auto;
+  overflow-y: auto;
   background-color: white;
   //border-radius: 3rem;
   box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.062);
@@ -120,10 +138,9 @@
   padding: 2rem;
   transition: all 0.5s ease-in-out;
   transform: scale(0);
-@media screen and (max-width:550px) {
-  width: 300px;
-      }
-
+  @media screen and (max-width: 550px) {
+    width: 300px;
+  }
 }
 
 .mytoggle-fixed {
@@ -142,9 +159,9 @@
   //margin-bottom: 2rem;
   border-bottom: 2px solid #374151;
   padding-bottom: 2rem;
-   @media screen and (max-width:550px) {
-  font-size: 1.2rem;
-      }
+  @media screen and (max-width: 550px) {
+    font-size: 1.2rem;
+  }
 }
 
 .myactual-questions-container {
@@ -157,9 +174,9 @@
   width: 100%;
   height: 100%;
 
-  @media screen and (max-width:550px) {
-      grid-template-columns: repeat(3, 1fr);
-      }
+  @media screen and (max-width: 550px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .myquestion {
@@ -174,8 +191,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   cursor: pointer;
-    position: relative;
-
+  position: relative;
 }
 
 button[disabled] {
@@ -198,21 +214,21 @@ button[disabled]:hover {
   font-weight: 600;
   cursor: pointer;
 }
- .location-icon{
-position: absolute;
-top: -28px;
-left: 50%;
-transform: translateX(-50%);
-cursor: pointer;
-font-size: 24px;
-color: #374151;
- }
+.location-icon {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  font-size: 24px;
+  color: #374151;
+}
 
-.disable-timer{
+.disable-timer {
   display: none;
 }
 
-input{
+input {
   border: 2px solid #374151;
   border-radius: 0.5rem;
   margin-top: 2rem;
@@ -220,7 +236,7 @@ input{
   padding: 0.3rem;
   width: 190px;
 }
-input::placeholder{
+input::placeholder {
   color: #374151;
   font-size: 0.9rem;
 }
