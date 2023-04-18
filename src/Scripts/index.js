@@ -5,13 +5,20 @@ let Questions;
 let timeInterval;
 
 let time;
+let finalAnswers = {
+  examName: "",
+  examID: "",
+  answers: [],
+};
 
 async function fetchData() {
   try {
     const response = await fetch("https://bayoumymath.com/api/quiz2/22");
 
     if (!response.ok) {
-      throw new Error("Network response was not OK");
+      throw new Error(
+        "Some thing wrong happened while retrieving the exam details, please refresh the page and try again!"
+      );
     }
 
     exam = await response.json();
@@ -31,315 +38,17 @@ async function fetchData() {
     InitQuiz();
     showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
+    finalAnswers.examName = exam.quiz.name;
+    finalAnswers.examID = exam.quiz.id;
   } catch (error) {
     console.error("Error:", error);
+    alert(
+      "Some thing wrong happened while retrieving the exam details, please refresh the page and try again!"
+    );
   }
 }
 document.addEventListener("DOMContentLoaded", fetchData());
 //Exam Details
-
-const exa = {
-  title: "Section 2, Module 1: Math",
-  time: "120",
-  questions: [
-    {
-      question: "What is Your Name?",
-      answers: [],
-    },
-
-    {
-      id: 10,
-      question: "What is Laravel?",
-      answers: [
-        {
-          answer: "Laravel is an open-source widely used Ruby framework.",
-          order: "A",
-        },
-
-        {
-          answer: "Laravel is an open-source widely used Ruby framework.",
-          order: "B",
-        },
-
-        {
-          answer: "Laravel is an open-source widely used Ruby framework.",
-          order: "C",
-        },
-
-        {
-          answer: "Laravel is an open-source widely used Ruby framework.",
-          order: "D",
-        },
-      ],
-    },
-
-    {
-      question: "What is HTTP middleware in Laravel?",
-      answers: [
-        {
-          text: "HTTP middleware is a web server used by Laravel similar to Apache and Nginx.",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "HTTP middleware is a technique for filtering HTTP requests.",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "HTTP middleware is a technique for updating Laravel via HTTP.",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "HTTP middleware is a technique for installing Laravel via HTTP.",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-    {
-      question: "Which of the following are true for routes in Laravel?",
-      answers: [
-        {
-          text: "Routes can only handle GET requests",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "You can not pass any arguments to your routes.",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "Laravel is an open-source widely used JavaScript framework.",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "A route is an endpoint specified by a URI (Uniform Resource Identifier).",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-    {
-      question: "Which of the following are true for Controllers in Laravel?",
-      answers: [
-        {
-          text: "You should avoid using controllers as it is considered bad practice.",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "Controllers are stored in the app/Http/Controllers directory.",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "Controllers can group related request handling logic into a single class.",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "A controller is the C in the (Model-View-Controller) architecture.",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-    {
-      question:
-        "Which artisan command would you use to create a new Laravel Controller?",
-      answers: [
-        {
-          text: "php artisan controller:make controller_name",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "php artisan make:controller controller_name",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "php artisan create:controller controller_name",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "php artisan controller create controller_name",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-    {
-      question: "What is service container in Laravel?",
-      answers: [
-        {
-          text: "Dockerized Laravel applications are called service containers.",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "Service container is a tool used for performing dependency injection in Laravel.",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "Laravel is an open-source widely used JavaScript framework.",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "Laravel is an open-source widely used Python framework.",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-    {
-      question:
-        "Which artisan command would you use to create a new Laravel Model?",
-      answers: [
-        {
-          text: "php artisan make:model ModelName",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "php artisan create:model ModelName",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "php artisan model:make ModelName",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "php artisan model create ModelName",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-    {
-      question: "What is the name of the Template Engine utilized by Laravel?",
-      answers: [
-        {
-          text: "Squirrelly",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "Blade",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "Twig",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "Pug",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-    {
-      question:
-        "Which artisan command would you use to create a new Laravel Migration?",
-      answers: [
-        {
-          text: "php artisan make:migrations create_users_table",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "php artisan make:migrations create_users_table",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "php artisan make:migration create_users_table",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "php artisan create:migrations create_users_table",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-    {
-      question:
-        "Which artisan command will you used to enable maintenance mode in Laravel?",
-      answers: [
-        {
-          text: "php artisan pause",
-          correct: false,
-          selected: false,
-          order: "A",
-        },
-        {
-          text: "php artisan maintenance",
-          correct: true,
-          selected: false,
-          order: "B",
-        },
-        {
-          text: "php artisan down",
-          correct: false,
-          selected: false,
-          order: "C",
-        },
-        {
-          text: "php artisan stop",
-          correct: false,
-          selected: false,
-          order: "D",
-        },
-      ],
-    },
-  ],
-};
 
 //timer
 
@@ -384,11 +93,59 @@ showTimerBtn.addEventListener("click", showTimer);
 //submit button logic
 const submitBtn = document.querySelector(".submit-btn");
 submitBtn.addEventListener("click", handleSubmit);
+
 function handleSubmit() {
   //perform an automatic submission then clear the local storage and the interval as a result of successful submission (.then())
-  localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Questions"));
-  localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Time"));
-  clearInterval(timeInterval);
+  let confirm;
+  let Questions = JSON.parse(
+    localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
+  );
+  if (Questions) {
+    Questions.forEach((question) => {
+      let selected;
+      if (question.answers) {
+        selected = question.answers.filter((answer) => answer.selected);
+        let QuestionID = question.id;
+        if (selected.length !== 0) {
+          finalAnswers.answers.push({ [QuestionID]: selected[0].order });
+        }
+      } else if (question.answer && question.answer !== "") {
+        let QuestionID = "essay " + question.id;
+        finalAnswers.answers.push({ [QuestionID]: question.answer });
+      }
+    });
+  } else {
+    confirm = window.confirm(
+      "You haven't answered any question yet, Do you really want to submit?"
+    );
+
+    console.log("You haven't answered any question");
+  }
+  if (finalAnswers.answers.length > 0 || confirm) {
+    try {
+      let response = fetch("https://example.com/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(finalAnswers),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // Do some stuff ...
+        });
+      if (!response.ok) {
+        throw new Error("Submit process failed, please try again!");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  }
+  console.log(finalAnswers);
+
+  //console.log(Questions);
+
+  //localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Questions"));
+  //localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Time"));
+  //clearInterval(timeInterval);
 }
 
 //Variables ---------------------------------------
@@ -540,10 +297,10 @@ const InitQuiz = () => {
     myInput.style.display = "block";
     inputContainer.appendChild(myInput);
     document
-    .querySelector("input")
-    .addEventListener("change", handleInputChange);
-    console.log(document.querySelector("input"));
-    if(Questions[currentQuestionIndex].answer){
+      .querySelector("input")
+      .addEventListener("change", handleInputChange);
+    //console.log(document.querySelector("input"));
+    if (Questions[currentQuestionIndex].answer) {
       document.querySelector("input").value = parseInt(
         Questions[currentQuestionIndex].answer
       );
@@ -597,7 +354,7 @@ function showPopupQuestions() {
           selected = true;
         }
       });
-    }else if (Questions[index].answer && Questions[index].answer !== "") {
+    } else if (Questions[index].answer && Questions[index].answer !== "") {
       selected = true;
     }
     if (selected) {
