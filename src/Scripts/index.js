@@ -8,6 +8,7 @@ let time;
 let finalAnswers = {
   examName: "",
   examID: "",
+  studentID: 15,
   answers: [],
 };
 const examName = document.querySelector(".exam-title");
@@ -43,10 +44,10 @@ async function fetchData() {
     examName.innerHTML = exam.quiz.name;
   } catch (error) {
     console.error("Error:", error);
-    /*
+
     alert(
       "Some thing wrong happened while retrieving the exam details, please refresh the page and try again!"
-    );*/
+    );
   }
 }
 document.addEventListener("DOMContentLoaded", fetchData());
@@ -108,8 +109,18 @@ function handleSubmit() {
       if (question.answers) {
         selected = question.answers.filter((answer) => answer.selected);
         let QuestionID = question.id;
+        let alphabetAnswer;
         if (selected.length !== 0) {
-          finalAnswers.answers.push({ [QuestionID]: selected[0].order });
+          if (selected[0].order == "A") {
+            alphabetAnswer = "a1";
+          } else if (selected[0].order == "B") {
+            alphabetAnswer = "a2";
+          } else if (selected[0].order == "C") {
+            alphabetAnswer = "a3";
+          } else if (selected[0].order == "D") {
+            alphabetAnswer = "a4";
+          }
+          finalAnswers.answers.push({ [QuestionID]: alphabetAnswer });
         }
       } else if (question.answer && question.answer !== "") {
         let QuestionID = "essay " + question.id;
@@ -185,9 +196,10 @@ let footerQuestionsCount = document.querySelector(".questions-count");
 dotBtn.addEventListener("click", () =>
   dotMenu.classList.toggle("hide-dot-menu")
 );
-document.querySelectorAll(".hide-drop-down").forEach((btn)=>{
+document.querySelectorAll(".hide-drop-down").forEach((btn) => {
   btn.addEventListener("click", () =>
-  dotMenu.classList.toggle("hide-dot-menu"))
+    dotMenu.classList.toggle("hide-dot-menu")
+  );
 });
 
 //hover-text
@@ -347,8 +359,8 @@ const popupquestions = document.querySelector(".myactual-questions-container");
 
 function showPopupQuestions() {
   popupquestions.innerHTML = "";
-const windowExamTitle = document.querySelector(".window-exam-title");
-    windowExamTitle.innerHTML = exam.quiz.name;
+  const windowExamTitle = document.querySelector(".window-exam-title");
+  windowExamTitle.innerHTML = exam.quiz.name;
 
   Questions.forEach((ques, index) => {
     let popupquestion = document.createElement("span");
