@@ -7,6 +7,7 @@ let timeInterval;
 let time;
 let finalAnswers = {
   examID: "",
+  answers: [],
 };
 const examName = document.querySelector(".exam-title");
 async function fetchData() {
@@ -117,17 +118,11 @@ function handleSubmit() {
           } else if (selected[0].order == "D") {
             alphabetAnswer = "a4";
           }
-          //finalAnswers.answers.push({ [QuestionID]: alphabetAnswer });
-          //finalAnswers.QuestionID=alphabetAnswer;
-          finalAnswers = { ...finalAnswers, [QuestionID]: alphabetAnswer };
+          finalAnswers.answers.push({ [QuestionID]: alphabetAnswer });
         }
       } else if (question.answer && question.answer !== "") {
         let QuestionID = "essay_" + question.id;
-        //finalAnswers.answers.push({ [QuestionID]: question.answer });
-        finalAnswers = {
-          ...finalAnswers,
-          [QuestionID]: question.answer,
-        };
+        finalAnswers.answers.push({ [QuestionID]: question.answer });
       }
     });
   } else {
@@ -137,7 +132,7 @@ function handleSubmit() {
 
     console.log("You haven't answered any question");
   }
-  if (finalAnswers || confirm) {
+  if (finalAnswers.answers.length > 0 || confirm) {
     try {
       let response = fetch("https://bayoumymath.com/api/quiz2/submit/22", {
         method: "POST",
@@ -154,7 +149,7 @@ function handleSubmit() {
         .then((data) => {
           console.log(data);
         });
-      if (response.ok) {
+      if (!response.ok) {
         throw new Error("Submit process failed, please try again!");
       }
     } catch (error) {
