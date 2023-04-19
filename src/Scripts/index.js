@@ -58,7 +58,9 @@ if (showTimerBtn) {
 
 //submit button logic
 const submitBtn = document.querySelector(".submit-btn");
-submitBtn.addEventListener("click", handleSubmit);
+if (submitBtn) {
+  submitBtn.addEventListener("click", handleSubmit);
+}
 
 function handleSubmit() {
   //perform an automatic submission then clear the local storage and the interval as a result of successful submission (.then())
