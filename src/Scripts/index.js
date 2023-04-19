@@ -9,45 +9,7 @@ let finalAnswers = {
   examID: "",
 };
 const examName = document.querySelector(".exam-title");
-async function fetchData() {
-  try {
-    const response = await fetch("https://bayoumymath.com/api/quiz2/22");
 
-    if (!response.ok) {
-      throw new Error(
-        "Something wrong happened while retrieving the exam details, please refresh the page and try again!"
-      );
-    }
-
-    exam = await response.json();
-
-    Questions = JSON.parse(
-      localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
-    ) || [...exam.choosequestions, ...exam.essayquestions];
-
-    time =
-      parseInt(
-        JSON.parse(
-          localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Time"))
-        )
-      ) || parseInt(exam.quiz.duration * 60);
-
-    console.log(exam);
-    InitQuiz();
-    showPopupQuestions();
-    timeInterval = setInterval("timer()", 1000);
-    //finalAnswers.examName = exam.quiz.name;
-    finalAnswers.examID = exam.quiz.id;
-    examName.innerHTML = exam.quiz.name;
-  } catch (error) {
-    console.error("Error:", error);
-
-    alert(
-      "Some thing wrong happened while retrieving the exam details, please refresh the page and try again!"
-    );
-  }
-}
-document.addEventListener("DOMContentLoaded", fetchData());
 //Exam Details
 
 //timer
@@ -79,8 +41,9 @@ function hideTimer() {
   hideTimerBtn.classList.toggle("disable-timer");
   showTimerBtn.classList.toggle("disable-timer");
 }
-
-hideTimerBtn.addEventListener("click", hideTimer);
+if (hideTimerBtn) {
+  hideTimerBtn.addEventListener("click", hideTimer);
+}
 
 //show timer logic
 function showTimer() {
@@ -89,7 +52,9 @@ function showTimer() {
   showTimerBtn.classList.toggle("disable-timer");
 }
 
-showTimerBtn.addEventListener("click", showTimer);
+if (showTimerBtn) {
+  showTimerBtn.addEventListener("click", showTimer);
+}
 
 //submit button logic
 const submitBtn = document.querySelector(".submit-btn");
@@ -424,3 +389,43 @@ function showPopupQuestions(res) {
     });
   }
 }
+
+async function fetchData() {
+  try {
+    const response = await fetch("https://bayoumymath.com/api/quiz2/22");
+
+    if (!response.ok) {
+      throw new Error(
+        "Something wrong happened while retrieving the exam details, please refresh the page and try again!"
+      );
+    }
+
+    exam = await response.json();
+
+    Questions = JSON.parse(
+      localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
+    ) || [...exam.choosequestions, ...exam.essayquestions];
+
+    time =
+      parseInt(
+        JSON.parse(
+          localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Time"))
+        )
+      ) || parseInt(exam.quiz.duration * 60);
+
+    console.log(exam);
+    InitQuiz();
+    showPopupQuestions();
+    timeInterval = setInterval("timer()", 1000);
+    //finalAnswers.examName = exam.quiz.name;
+    finalAnswers.examID = exam.quiz.id;
+    examName.innerHTML = exam.quiz.name;
+  } catch (error) {
+    console.error("Error:", error);
+
+    alert(
+      "Some thing wrong happened while retrieving the exam details, please refresh the page and try again!"
+    );
+  }
+}
+document.addEventListener("DOMContentLoaded", fetchData());
