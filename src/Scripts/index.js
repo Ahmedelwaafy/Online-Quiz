@@ -123,7 +123,7 @@ function handleSubmit() {
           finalAnswers.answers.push({ [QuestionID]: alphabetAnswer });
         }
       } else if (question.answer && question.answer !== "") {
-        let QuestionID = "essay " + question.id;
+        let QuestionID = "essay_" + question.id;
         finalAnswers.answers.push({ [QuestionID]: question.answer });
       }
     });
