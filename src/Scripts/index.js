@@ -6,9 +6,7 @@ let timeInterval;
 
 let time;
 let finalAnswers = {
-  examName: "",
   examID: "",
-  studentID: 15,
   answers: [],
 };
 const examName = document.querySelector(".exam-title");
@@ -39,7 +37,7 @@ async function fetchData() {
     InitQuiz();
     showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
-    finalAnswers.examName = exam.quiz.name;
+    //finalAnswers.examName = exam.quiz.name;
     finalAnswers.examID = exam.quiz.id;
     examName.innerHTML = exam.quiz.name;
   } catch (error) {
