@@ -107,7 +107,7 @@ function handleSubmit() {
   }
   if (Questions || confirm) {
     try {
-      fetch("https://bayoumymath.com/api/quiz2/submit/22", {
+      fetch(`https://bayoumymath.com/api/quiz2/submit/${ExamVariableID}`, {
         method: "POST",
         headers: {
           Accept: "application/json",
