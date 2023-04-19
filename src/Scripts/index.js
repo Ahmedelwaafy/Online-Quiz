@@ -152,10 +152,13 @@ function handleSubmit() {
           console.log(response);
           if (!response.ok) {
             throw new Error("Submit process failed, please try again!");
-          }else{
-            localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Questions"));
+          } else {
+            localStorage.clear(
+              JSON.stringify(exam.quiz.name + " " + "Questions")
+            );
             localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Time"));
-            //clearInterval(timeInterval);
+            clearInterval(timeInterval);
+            document.querySelector(".timer").innerHTML = "";
           }
           return response.json();
         })
@@ -171,8 +174,6 @@ function handleSubmit() {
     }
   }
   console.log(finalAnswers);
-
-  
 }
 
 //Variables ---------------------------------------
