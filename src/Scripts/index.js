@@ -15,7 +15,7 @@ async function fetchData() {
 
     if (!response.ok) {
       throw new Error(
-        "Some thing wrong happened while retrieving the exam details, please refresh the page and try again!"
+        "Something wrong happened while retrieving the exam details, please refresh the page and try again!"
       );
     }
 
@@ -60,6 +60,7 @@ function timer() {
   document.querySelector(".timer").innerHTML = +minutes + ":" + seconds;
   if (time <= 0) {
     handleSubmit();
+    clearInterval(timeInterval);
   } else {
     time--;
     localStorage.setItem(JSON.stringify(exam.quiz.name + " " + "Time"), time);
@@ -137,9 +138,9 @@ function handleSubmit() {
 
     console.log("You haven't answered any question");
   }
-  if (finalAnswers || confirm) {
+  if (Questions || confirm) {
     try {
-      let response = fetch("https://bayoumymath.com/api/quiz2/submit/22", {
+      fetch("https://bayoumymath.com/api/quiz2/submit/22", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -149,25 +150,29 @@ function handleSubmit() {
       })
         .then((response) => {
           console.log(response);
+          if (!response.ok) {
+            throw new Error("Submit process failed, please try again!");
+          }else{
+            //localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Questions"));
+            //localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Time"));
+            //clearInterval(timeInterval);
+          }
           return response.json();
         })
         .then((data) => {
           console.log(data);
+          showPopupQuestions(data);
+        })
+        .catch((error) => {
+          alert("Submit process failed, please try again!");
         });
-      if (response.ok) {
-        throw new Error("Submit process failed, please try again!");
-      }
     } catch (error) {
-      alert(error);
+      alert("Submit process failed, please try again!");
     }
   }
   console.log(finalAnswers);
 
-  //console.log(Questions);
-
-  //localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Questions"));
-  //localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Time"));
-  //clearInterval(timeInterval);
+  
 }
 
 //Variables ---------------------------------------
@@ -366,36 +371,55 @@ function goToQuestion(e) {
 
 const popupquestions = document.querySelector(".myactual-questions-container");
 
-function showPopupQuestions() {
+function showPopupQuestions(res) {
   popupquestions.innerHTML = "";
   const windowExamTitle = document.querySelector(".window-exam-title");
-  windowExamTitle.innerHTML = exam.quiz.name;
+  if (res) {
+    windowExamTitle.innerHTML = "Congratulations!!!";
+    const resultContainer = document.querySelector(".result-container");
+    FixedDiv.classList.add("mytoggle-fixed");
+    QuestionsWrapper.classList.add("mytoggle-QuestionsWrapper");
+    const result = document.createElement("h3");
+    result.textContent = `Your degree is ${res.dgree} out of ${res.out_of}.`;
+    resultContainer.appendChild(result);
 
-  Questions.forEach((ques, index) => {
-    let popupquestion = document.createElement("span");
-    popupquestion.innerHTML = index + 1;
-    popupquestion.addEventListener("click", goToQuestion);
-    let selected = false;
+    const Btn = document.createElement("a");
+    Btn.setAttribute("href", "https://tailwindcss.com/docs/installation");
+    Btn.setAttribute("target", "_blank");
+    Btn.innerText = "Model Answer";
+    resultContainer.appendChild(Btn);
+    HideDiv.addEventListener("click", () => {
+      FixedDiv.classList.add("mytoggle-fixed");
+      QuestionsWrapper.classList.add("mytoggle-QuestionsWrapper");
+    });
+  } else {
+    windowExamTitle.innerHTML = exam.quiz.name;
+    Questions.forEach((ques, index) => {
+      let popupquestion = document.createElement("span");
+      popupquestion.innerHTML = index + 1;
+      popupquestion.addEventListener("click", goToQuestion);
+      let selected = false;
 
-    if (Questions[index].answers) {
-      Questions[index].answers.forEach((answer) => {
-        if (answer.selected) {
-          selected = true;
-        }
-      });
-    } else if (Questions[index].answer && Questions[index].answer !== "") {
-      selected = true;
-    }
-    if (selected) {
-      popupquestion.classList.add("selected-popup-question");
-    } else {
-      popupquestion.classList.add("myquestion");
-    }
-    if (currentQuestionIndex === index) {
-      const locationIcon = document.createElement("icon");
-      locationIcon.classList.add("fa", "fa-location-dot", "location-icon");
-      popupquestion.appendChild(locationIcon);
-    }
-    popupquestions.appendChild(popupquestion);
-  });
+      if (Questions[index].answers) {
+        Questions[index].answers.forEach((answer) => {
+          if (answer.selected) {
+            selected = true;
+          }
+        });
+      } else if (Questions[index].answer && Questions[index].answer !== "") {
+        selected = true;
+      }
+      if (selected) {
+        popupquestion.classList.add("selected-popup-question");
+      } else {
+        popupquestion.classList.add("myquestion");
+      }
+      if (currentQuestionIndex === index) {
+        const locationIcon = document.createElement("icon");
+        locationIcon.classList.add("fa", "fa-location-dot", "location-icon");
+        popupquestion.appendChild(locationIcon);
+      }
+      popupquestions.appendChild(popupquestion);
+    });
+  }
 }
