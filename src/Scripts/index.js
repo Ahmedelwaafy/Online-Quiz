@@ -9,7 +9,7 @@ let finalAnswers = {
   examID: "",
 };
 const examName = document.querySelector(".exam-title");
-
+let ExamVariableID = 22;
 //Exam Details
 
 //timer
@@ -394,7 +394,9 @@ function showPopupQuestions(res) {
 
 async function fetchData() {
   try {
-    const response = await fetch("https://bayoumymath.com/api/quiz2/22");
+    const response = await fetch(
+      `https://bayoumymath.com/api/quiz2/${ExamVariableID}`
+    );
 
     if (!response.ok) {
       throw new Error(
