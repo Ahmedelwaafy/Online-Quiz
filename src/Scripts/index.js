@@ -153,8 +153,8 @@ function handleSubmit() {
           if (!response.ok) {
             throw new Error("Submit process failed, please try again!");
           }else{
-            //localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Questions"));
-            //localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Time"));
+            localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Questions"));
+            localStorage.clear(JSON.stringify(exam.quiz.name + " " + "Time"));
             //clearInterval(timeInterval);
           }
           return response.json();
