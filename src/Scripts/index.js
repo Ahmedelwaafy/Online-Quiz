@@ -142,6 +142,10 @@ let currentQuestionIndex = 0;
 const dotBtn = document.querySelector(".menu-wrapper button");
 const dotMenu = document.querySelector(".dot-menu");
 
+//explanation-btn
+const explanationBtn = document.querySelector(".explanation-btn");
+const explanationText = document.querySelector(".explanation-text");
+
 //hover-text
 const crossBtn = document.querySelector(".cross-button");
 const hoverText = document.querySelector(".hover-text");
@@ -168,6 +172,14 @@ let footerQuestionsCount = document.querySelector(".questions-count");
 dotBtn.addEventListener("click", () =>
   dotMenu.classList.toggle("hide-dot-menu")
 );
+
+
+//dot-menu
+explanationBtn.addEventListener("click", () =>
+  explanationText.classList.toggle("disable-timer")
+);
+
+
 document.querySelectorAll(".hide-drop-down").forEach((btn) => {
   btn.addEventListener("click", () =>
     dotMenu.classList.toggle("hide-dot-menu")
