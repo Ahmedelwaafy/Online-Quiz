@@ -73,7 +73,7 @@ function handleSubmit() {
   if (SubmitQuestions) {
     SubmitQuestionsArray.forEach((question) => {
       //if the answer is of type choose it will be overwritten else it will put in the finalAnswers object without editing
-            let answer = question[1];
+      let answer = question[1];
       if (question[1] == "A") {
         answer = "a1";
       } else if (question[1] == "B") {
@@ -83,10 +83,10 @@ function handleSubmit() {
       } else if (question[1] == "D") {
         answer = "a4";
       }
- finalAnswers = {
-   ...finalAnswers,
-   [question[0]]: answer,
- };
+      finalAnswers = {
+        ...finalAnswers,
+        [question[0]]: answer,
+      };
     });
   } else {
     confirm = window.confirm(
@@ -234,9 +234,8 @@ const InitQuiz = () => {
 
   function selectAnswer(e) {
     let selectedAnswerIndex = e.target.dataset.index;
-    Questions[currentQuestionIndex].answers.forEach((answer, index) => {
-    });
-    
+    Questions[currentQuestionIndex].answers.forEach((answer, index) => {});
+
     let QuestionID = Questions[currentQuestionIndex].id;
     //finalAnswers.answers.push({ [QuestionID]: question.answer });
 
@@ -257,8 +256,7 @@ const InitQuiz = () => {
 
   function handleInputChange(e) {
     console.log(e.target.value);
-    
-    
+
     let QuestionID = "essay_" + Questions[currentQuestionIndex].id;
     XQuestions = {
       ...XQuestions,
@@ -267,7 +265,8 @@ const InitQuiz = () => {
     console.log(XQuestions);
     localStorage.setItem(
       JSON.stringify(exam.quiz.name + " " + "Questions"),
-      JSON.stringify(XQuestions));
+      JSON.stringify(XQuestions)
+    );
     InitQuiz();
     showPopupQuestions();
   }
@@ -283,8 +282,7 @@ const InitQuiz = () => {
       singleAnswerText.innerHTML = answer.answer;
 
       //add a different style for the selected answer
-      
-      
+
       let QuestionID = Questions[currentQuestionIndex].id;
 
       if (QuestionID in XQuestions && answer.order == XQuestions[QuestionID]) {
@@ -305,12 +303,13 @@ const InitQuiz = () => {
       .querySelector("input")
       .addEventListener("change", handleInputChange);
     //console.log(document.querySelector("input"));
- 
-   
+
     let QuestionID = "essay_" + Questions[currentQuestionIndex].id;
 
     if (QuestionID in XQuestions) {
-      document.querySelector("input").value = parseFloat(XQuestions[QuestionID]);
+      document.querySelector("input").value = parseFloat(
+        XQuestions[QuestionID]
+      );
     }
   }
 
@@ -330,15 +329,14 @@ const InitQuiz = () => {
   footerQuestionsCount.innerHTML = Questions.length;
 };
 
-
 //goToQuestion function logic
 function goToQuestion(e) {
   FixedDiv.classList.remove("mytoggle-fixed");
   QuestionsWrapper.classList.remove("mytoggle-QuestionsWrapper");
 
-  currentQuestionIndex = e.target.innerHTML - 1;
-  InitQuiz();
+  currentQuestionIndex = parseInt(e.target.innerHTML) - 1;
   showPopupQuestions();
+  InitQuiz();
 }
 
 //add the questions numbers to the popup modal
@@ -374,15 +372,11 @@ function showPopupQuestions(res) {
       popupquestion.addEventListener("click", goToQuestion);
       let selected = false;
 
-      if (Questions[index].answers ) {
-
+      if (Questions[index].answers) {
         let QuestionID = Questions[index].id;
-        if(QuestionID in XQuestions){
-
+        if (QuestionID in XQuestions) {
           selected = true;
         }
-
-        
       } else {
         let QuestionID = "essay_" + Questions[index].id;
         if (QuestionID in XQuestions) {
@@ -395,10 +389,6 @@ function showPopupQuestions(res) {
       } else {
         popupquestion.classList.add("myquestion");
       }
-
-      
-
-
 
       if (currentQuestionIndex === index) {
         const locationIcon = document.createElement("icon");
@@ -424,7 +414,7 @@ async function fetchData() {
 
     exam = await response.json();
 
-    Questions =  [...exam.choosequestions, ...exam.essayquestions];
+    Questions = [...exam.choosequestions, ...exam.essayquestions];
 
     time =
       parseInt(
@@ -432,11 +422,12 @@ async function fetchData() {
           localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Time"))
         )
       ) || parseInt(exam.quiz.duration * 60);
-XQuestions =
-  JSON.parse(
-    localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
-  ) ||{};
-   console.log(exam);
+    XQuestions =
+      JSON.parse(
+        localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
+      ) || {};
+    console.log(exam);
+    hideTimerBtn.classList.remove("disable-timer");
     InitQuiz();
     showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
