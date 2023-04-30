@@ -1,6 +1,7 @@
 let exam;
 //Questions
 let Questions;
+let XQuestions;
 
 let timeInterval;
 
@@ -65,38 +66,27 @@ if (submitBtn) {
 function handleSubmit() {
   //perform an automatic submission then clear the local storage and the interval as a result of successful submission (.then())
   let confirm;
-  let Questions = JSON.parse(
+  let SubmitQuestions = JSON.parse(
     localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
   );
-  if (Questions) {
-    Questions.forEach((question) => {
-      let selected;
-      if (question.answers) {
-        selected = question.answers.filter((answer) => answer.selected);
-        let QuestionID = question.id;
-        let alphabetAnswer;
-        if (selected.length !== 0) {
-          if (selected[0].order == "A") {
-            alphabetAnswer = "a1";
-          } else if (selected[0].order == "B") {
-            alphabetAnswer = "a2";
-          } else if (selected[0].order == "C") {
-            alphabetAnswer = "a3";
-          } else if (selected[0].order == "D") {
-            alphabetAnswer = "a4";
-          }
-          //finalAnswers.answers.push({ [QuestionID]: alphabetAnswer });
-          //finalAnswers.QuestionID=alphabetAnswer;
-          finalAnswers = { ...finalAnswers, [QuestionID]: alphabetAnswer };
-        }
-      } else if (question.answer && question.answer !== "") {
-        let QuestionID = "essay_" + question.id;
-        //finalAnswers.answers.push({ [QuestionID]: question.answer });
-        finalAnswers = {
-          ...finalAnswers,
-          [QuestionID]: question.answer,
-        };
+  let SubmitQuestionsArray = Object.entries(SubmitQuestions);
+  if (SubmitQuestions) {
+    SubmitQuestionsArray.forEach((question) => {
+      //if the answer is of type choose it will be overwritten else it will put in the finalAnswers object without editing
+            let answer = question[1];
+      if (question[1] == "A") {
+        answer = "a1";
+      } else if (question[1] == "B") {
+        answer = "a2";
+      } else if (question[1] == "C") {
+        answer = "a3";
+      } else if (question[1] == "D") {
+        answer = "a4";
       }
+ finalAnswers = {
+   ...finalAnswers,
+   [question[0]]: answer,
+ };
     });
   } else {
     confirm = window.confirm(
@@ -105,7 +95,7 @@ function handleSubmit() {
 
     console.log("You haven't answered any question");
   }
-  if (Questions || confirm) {
+  if (SubmitQuestions || confirm) {
     try {
       fetch(`https://bayoumymath.com/api/quiz2/submit/${ExamVariableID}`, {
         method: "POST",
@@ -245,15 +235,20 @@ const InitQuiz = () => {
   function selectAnswer(e) {
     let selectedAnswerIndex = e.target.dataset.index;
     Questions[currentQuestionIndex].answers.forEach((answer, index) => {
-      answer.selected = false;
     });
-    Questions[currentQuestionIndex].answers[
-      selectedAnswerIndex
-    ].selected = true;
+    
+    let QuestionID = Questions[currentQuestionIndex].id;
+    //finalAnswers.answers.push({ [QuestionID]: question.answer });
+
+    XQuestions = {
+      ...XQuestions,
+      [QuestionID]:
+        Questions[currentQuestionIndex].answers[selectedAnswerIndex].order,
+    };
     //localStorage.setItem("examQuestions", JSON.stringify(questions));
     localStorage.setItem(
       JSON.stringify(exam.quiz.name + " " + "Questions"),
-      JSON.stringify(Questions)
+      JSON.stringify(XQuestions)
     );
 
     InitQuiz();
@@ -262,16 +257,23 @@ const InitQuiz = () => {
 
   function handleInputChange(e) {
     console.log(e.target.value);
-    Questions[currentQuestionIndex].answer = e.target.value;
+    
+    
+    let QuestionID = "essay_" + Questions[currentQuestionIndex].id;
+    XQuestions = {
+      ...XQuestions,
+      [QuestionID]: e.target.value,
+    };
+    console.log(XQuestions);
     localStorage.setItem(
       JSON.stringify(exam.quiz.name + " " + "Questions"),
-      JSON.stringify(Questions)
-    );
-
+      JSON.stringify(XQuestions));
     InitQuiz();
     showPopupQuestions();
   }
   //add the order and text of each answer
+  //check if the the question is of type choose (has answers array)
+
   if (Questions[currentQuestionIndex].answers) {
     Questions[currentQuestionIndex].answers.forEach((answer, index) => {
       let singleAnswerDiv = document.createElement("div");
@@ -281,10 +283,13 @@ const InitQuiz = () => {
       singleAnswerText.innerHTML = answer.answer;
 
       //add a different style for the selected answer
-      if (answer.selected) {
+      
+      
+      let QuestionID = Questions[currentQuestionIndex].id;
+
+      if (QuestionID in XQuestions && answer.order == XQuestions[QuestionID]) {
         singleAnswerDiv.classList.add("selected");
       }
-
       singleAnswerDiv.appendChild(singleAnswerOrder);
       singleAnswerDiv.appendChild(singleAnswerText);
       currentQuestionAnswers.appendChild(singleAnswerDiv);
@@ -300,10 +305,12 @@ const InitQuiz = () => {
       .querySelector("input")
       .addEventListener("change", handleInputChange);
     //console.log(document.querySelector("input"));
-    if (Questions[currentQuestionIndex].answer) {
-      document.querySelector("input").value = parseInt(
-        Questions[currentQuestionIndex].answer
-      );
+ 
+   
+    let QuestionID = "essay_" + Questions[currentQuestionIndex].id;
+
+    if (QuestionID in XQuestions) {
+      document.querySelector("input").value = parseFloat(XQuestions[QuestionID]);
     }
   }
 
@@ -323,7 +330,6 @@ const InitQuiz = () => {
   footerQuestionsCount.innerHTML = Questions.length;
 };
 
-//document.addEventListener("DOMContentLoaded", InitQuiz);
 
 //goToQuestion function logic
 function goToQuestion(e) {
@@ -368,20 +374,32 @@ function showPopupQuestions(res) {
       popupquestion.addEventListener("click", goToQuestion);
       let selected = false;
 
-      if (Questions[index].answers) {
-        Questions[index].answers.forEach((answer) => {
-          if (answer.selected) {
-            selected = true;
-          }
-        });
-      } else if (Questions[index].answer && Questions[index].answer !== "") {
-        selected = true;
+      if (Questions[index].answers ) {
+
+        let QuestionID = Questions[index].id;
+        if(QuestionID in XQuestions){
+
+          selected = true;
+        }
+
+        
+      } else {
+        let QuestionID = "essay_" + Questions[index].id;
+        if (QuestionID in XQuestions) {
+          selected = true;
+        }
       }
+
       if (selected) {
         popupquestion.classList.add("selected-popup-question");
       } else {
         popupquestion.classList.add("myquestion");
       }
+
+      
+
+
+
       if (currentQuestionIndex === index) {
         const locationIcon = document.createElement("icon");
         locationIcon.classList.add("fa", "fa-location-dot", "location-icon");
@@ -406,9 +424,7 @@ async function fetchData() {
 
     exam = await response.json();
 
-    Questions = JSON.parse(
-      localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
-    ) || [...exam.choosequestions, ...exam.essayquestions];
+    Questions =  [...exam.choosequestions, ...exam.essayquestions];
 
     time =
       parseInt(
@@ -416,8 +432,11 @@ async function fetchData() {
           localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Time"))
         )
       ) || parseInt(exam.quiz.duration * 60);
-
-    console.log(exam);
+XQuestions =
+  JSON.parse(
+    localStorage.getItem(JSON.stringify(exam.quiz.name + " " + "Questions"))
+  ) ||{};
+   console.log(exam);
     InitQuiz();
     showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
