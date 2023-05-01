@@ -1,12 +1,12 @@
 p {
-    width: fit-content;
-    height: fit-content;
-    display: flex;
-    align-items: center;
-  }
-  .exam-title{
-    font-weight: bold;
-  }
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+}
+.exam-title {
+  font-weight: bold;
+}
 .current-question {
   font-weight: bold;
   margin-bottom: 50px;
@@ -89,6 +89,18 @@ p {
   transform: scaleY(1);
 }
 
+.explanation-text {
+    transform: scaleY(0);
+
+}
+
+.hide-explanation-text {
+  transform: scaleY(1);
+}
+
+.h-0{
+  height: 0;
+}
 /* fixed */
 
 .myfixed {
@@ -241,25 +253,24 @@ input::placeholder {
   font-size: 0.9rem;
 }
 
+.result-container {
+  h3 {
+    font-weight: bold;
+  }
 
-.result-container{
-  h3{
+  a {
     font-weight: bold;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    background-color: #374151;
+    color: white;
+    border: 2px solid #374151;
+    transition: all 0.3s ease-in-out;
+    border-radius: 0.7rem;
   }
-  
-  a{
-    font-weight: bold;
-padding-inline: 1rem;
-padding-block: 0.5rem;
-background-color: #374151;
-color: white;
-border: 2px solid #374151;
-transition: all 0.3s ease-in-out;
-border-radius: 0.7rem;
-  }
-  a:hover{
-color: #374151;
-background-color: white;
-border: 2px solid #374151;
+  a:hover {
+    color: #374151;
+    background-color: white;
+    border: 2px solid #374151;
   }
 }

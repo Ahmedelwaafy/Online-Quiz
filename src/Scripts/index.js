@@ -145,6 +145,9 @@ const dotMenu = document.querySelector(".dot-menu");
 //explanation-btn
 const explanationBtn = document.querySelector(".explanation-btn");
 const explanationText = document.querySelector(".explanation-text");
+const heightZero = document.querySelector(".h-0");
+const explanationWrapper = document.querySelector(".explanation-wrapper");
+const textAboveQuestion = document.querySelector(".text-above-question");
 
 //hover-text
 const crossBtn = document.querySelector(".cross-button");
@@ -173,12 +176,11 @@ dotBtn.addEventListener("click", () =>
   dotMenu.classList.toggle("hide-dot-menu")
 );
 
-
-//dot-menu
-explanationBtn.addEventListener("click", () =>
-  explanationText.classList.toggle("disable-timer")
-);
-
+//explanation-text
+explanationBtn.addEventListener("click", () => {
+  explanationText.classList.toggle("hide-explanation-text");
+  heightZero.classList.toggle("h-0");
+});
 
 document.querySelectorAll(".hide-drop-down").forEach((btn) => {
   btn.addEventListener("click", () =>
@@ -440,6 +442,8 @@ async function fetchData() {
       ) || {};
     console.log(exam);
     hideTimerBtn.classList.remove("disable-timer");
+    explanationWrapper.classList.remove("disable-timer");
+    textAboveQuestion.classList.remove("disable-timer");
     InitQuiz();
     showPopupQuestions();
     timeInterval = setInterval("timer()", 1000);
