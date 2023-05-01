@@ -46,6 +46,9 @@ if (hideTimerBtn) {
   hideTimerBtn.addEventListener("click", hideTimer);
 }
 
+
+
+
 //show timer logic
 function showTimer() {
   timeInterval = setInterval("timer()", 1000);
@@ -142,6 +145,8 @@ let currentQuestionIndex = 0;
 const dotBtn = document.querySelector(".menu-wrapper button");
 const dotMenu = document.querySelector(".dot-menu");
 
+
+
 //explanation-btn
 const explanationBtn = document.querySelector(".explanation-btn");
 const explanationText = document.querySelector(".explanation-text");
@@ -222,8 +227,11 @@ previousBtn.addEventListener("click", () => {
 });
 
 //functions ------------------------------------
-
 const InitQuiz = () => {
+  textAboveQuestion.innerHTML = Questions[currentQuestionIndex].text;
+
+  explanationText.innerHTML = Questions[currentQuestionIndex].explanationText;
+
   //add current Question's text and number
   let currentQuestion = document.querySelector(".current-question");
   let currentQuestionNumber = currentQuestionIndex + 1;
